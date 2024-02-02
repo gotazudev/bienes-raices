@@ -1,4 +1,5 @@
 <?php 
+
     // Importar la conexion
     require '../includes/config/database.php'; 
     $db = conectarDB();
@@ -21,6 +22,8 @@
         <h1>Administrador de bienes raices</h1>
         <?php if(intval($resultado) === 1): ?>
             <p class="alerta exito">Anuncio creado correctamente</p>
+            <?php elseif(intval($resultado) === 2): ?>
+                <p class="alerta exito">Anuncio actualizado correctamente</p>
         <?php endif; ?>
         <a href="/admin/propiedades/crear.php" class="boton boton-verde">Nueva propiedad</a>
     </main>
@@ -44,7 +47,7 @@
                 <td>S/ <?php echo $propiedad['precio']; ?> </td>
                 <td>
                     <a href="#" class="boton-rojo-block">Eliminar</a>
-                    <a href="#" class="boton-amarillo-block">Actualizar</a>
+                    <a href="propiedades/actualizar.php?id=<?php echo $propiedad['id'] ?>" class="boton-amarillo-block">Actualizar</a>
                 </td>
             </tr>
             <?php endwhile; ?>
