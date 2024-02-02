@@ -26,6 +26,11 @@
         // var_dump($_POST);   
         // echo "</pre>";
 
+        echo "<pre>";
+        var_dump($_FILES);   
+        echo "</pre>";
+        // exit;
+
         $titulo = mysqli_real_escape_string($db, $_POST["titulo"]);
         $precio = mysqli_real_escape_string($db, $_POST["precio"]);
         $descripcion = mysqli_real_escape_string($db, $_POST["descripcion"]);
@@ -33,6 +38,10 @@
         $wc = mysqli_real_escape_string($db, $_POST["wc"]);
         $estacionamiento = mysqli_real_escape_string($db, $_POST["estacionamiento"]);
         $vendedorId = mysqli_real_escape_string($db, $_POST["vendedor"]);
+
+        //Asignar files hacia la variable
+        $imagen = $_FILES['imagen'];
+        
 
         if(!$titulo){
             $errores[] = "Debes añadir un titulo";
@@ -56,12 +65,31 @@
             $errores[] = "Elige un vendedor";
         }
 
+        if(!$imagen['name'] || $imagen['error']){
+            $errores[]= "La imagen es obligatoria";
+        }
+
+        // Validar por tamaño (100 kb maximo)
+        $medida = 1000 * 100;
+        if($imagen['size'] > $medida){
+            $errores[] = "La imagen es muy pesada";
+        }
+
         // echo "<pre>";
         // var_dump($errores);
         // echo "</pre>";
 
-        //Revisar que el arreglo de errores este vacio
-        if(empty($errores)){
+        // Revisar que el arreglo de errores este vacío
+        if( empty($errores) ) {
+ 
+            $carpetaImagenes = '../../imagenes';
+ 
+            if(!is_dir($carpetaImagenes)){
+                mkdir($carpetaImagenes);
+            }
+
+            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes."/archivo.jpg");
+            exit;
 
         //Insertar en BD
         $query = "INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id ) VALUES ('$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedorId')";
@@ -90,7 +118,7 @@
             </div>
         <?php endforeach; ?>
 
-        <form class="formulario" method="POST" action="/admin/propiedades/crear.php" >
+        <form class="formulario" method="POST" action="/admin/propiedades/crear.php" enctype="multipart/form-data">
             <fieldset>
                 <legend>Informacion general</legend>
 
@@ -99,7 +127,7 @@
                 <label for="">Precio:</label>
                 <input type="number" id="precio" name="precio" placeholder="Precio propiedad" value="<?php echo $precio ?>">
                 <label for="">Imagen:</label>
-                <input type="file" id="imagen" accept="image/jpeg, image/png">
+                <input type="file" id="imagen" name="imagen" accept="image/jpeg, image/png">
                 <label for="descripcion">Descripcion:</label>
                 <textarea id="descripcion" name="descripcion" cols="30" rows="10" ><?php echo $descripcion ?></textarea>
             </fieldset>
