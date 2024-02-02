@@ -26,9 +26,9 @@
         // var_dump($_POST);   
         // echo "</pre>";
 
-        echo "<pre>";
-        var_dump($_FILES);   
-        echo "</pre>";
+        // echo "<pre>";
+        // var_dump($_FILES);   
+        // echo "</pre>";
         // exit;
 
         $titulo = mysqli_real_escape_string($db, $_POST["titulo"]);
@@ -49,8 +49,8 @@
         if(!$precio){
             $errores[] = "Debes añadir un precio";
         }
-        if(strlen($descripcion) <50){
-            $errores[] = "Debes añadir un descripcion y debes tener almenos 50 caracteres";
+        if(strlen($descripcion) <10){
+            $errores[] = "Debes añadir un descripcion y debes tener almenos 10 caracteres";
         }
         if(!$habitaciones){
             $errores[] = "Debes añadir un habitaciones";
@@ -81,24 +81,26 @@
 
         // Revisar que el arreglo de errores este vacío
         if( empty($errores) ) {
- 
-            $carpetaImagenes = '../../imagenes';
+            
+            // Crear carpeta 
+            $carpetaImagenes = '../../imagenes/';
  
             if(!is_dir($carpetaImagenes)){
                 mkdir($carpetaImagenes);
             }
 
-            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes."/archivo.jpg");
-            exit;
+            $nombreImagen = md5(uniqid(rand(),true)).".jpg";
+
+            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes.$nombreImagen);
 
         //Insertar en BD
-        $query = "INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id ) VALUES ('$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedorId')";
+        $query = "INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id ) VALUES ('$titulo', '$precio', '$nombreImagen','$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedorId')";
         // echo $query;
         $resultado = mysqli_query($db,$query);
 
             if($resultado){
                 // Redirecciona al usuario
-                header('Location: /admin');
+                header('Location: /admin?resultado=1');
             }
         }
     }   
