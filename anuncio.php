@@ -17,7 +17,7 @@
     // Obtener resultados
     $resultado = mysqli_query($db,$query);
 
-    if($resultado->num_rows == 0){
+    if(!$resultado->num_rows){
         header('Location: /');
     }
 

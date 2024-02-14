@@ -1,4 +1,10 @@
 <?php
+    require '../includes/funciones.php';
+    $auth = estaAutenticado();
+
+    if(!$auth){
+        header('Location: /');
+    }
  
 //? Importamos la DB:
  
@@ -49,7 +55,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 }
  
 //? Incluir template:
-require '../includes/funciones.php'; /* Sirve para exportar funciones o código mas complejo. Include es mas para templates. */
+ /* Sirve para exportar funciones o código mas complejo. Include es mas para templates. */
  
 $inicio = true; /* Para agregar la clase de incio creamos esta variable y se agrega autamitncament al include */
 incluirTemplate('header');
