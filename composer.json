@@ -1,0 +1,17 @@
+{
+    "name": "coffee/bienes",
+    "description": "Creando un proyecto con POO",
+    "type": "project",
+    "authors": [
+        {
+            "name": "gotazudev",
+            "email": "gio.ryder20@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "./classes"
+        }
+    }
+}

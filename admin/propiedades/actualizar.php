@@ -2,17 +2,13 @@
     require '../../includes/funciones.php';
     $auth = estaAutenticado();
     
-    if(!$id){
-        header('Location: /');
-    }
+    
 
     // Validar la URL por ID valido
     $id = $_GET['id'];
     $id = filter_var($id, FILTER_VALIDATE_INT);
 
-    if(!$id){
-        header('Location: /admin');
-    }
+    
 
     //Base de datos
     require '../../includes/config/database.php'; 

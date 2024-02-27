@@ -7,8 +7,9 @@
         header('Location: /');
     }
 
+    require 'includes/app.php';
+
     // Importar la BD
-    require 'includes/config/database.php';
     $db = conectarDB();
 
     // Consultar
@@ -23,7 +24,6 @@
 
     $propiedad = mysqli_fetch_assoc($resultado);
 
-    require 'includes/funciones.php';
     incluirTemplate('header');
  ?>
     <main class="contenedor seccion contenido-centrado">
